@@ -103,8 +103,8 @@ router.get('/', function(req, res, next) {
 	}
 	str2=str2.concat("]")
 	//JSON.parse(str2);
-	//res.send(str2);
-	res.send({"status":"success"});
+	res.send(str2);
+	//res.send({"status":"success"});
 });
 
 router.get('/all', function(req, res, next) {
