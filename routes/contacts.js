@@ -103,12 +103,13 @@ router.get('/', function(req, res, next) {
 	}
 	str2=str2.concat("]")
 	//JSON.parse(str2);
-	res.send(str2);
+	//res.send(str2);
+	res.send({"status":"success"});
 });
 
 router.get('/all', function(req, res, next) {
 	console.log("entered")
-	res.send({"name":"kethan"});
+	res.send({"status":"success"});
 });
 
 //saves a contact
@@ -116,11 +117,13 @@ router.post('/', function(req, res, next) {
     console.log("request to add");
     var con;
     con = req.body;
+	console.log(con+"sdflasdkfl"+req.body);
+	
     con.messages=new Array();
     var num = getNumOfContacts();
     writeContactToFile(num,con);
     putNumOfContacts(num+1);
-    res.send(""+(num));
+    res.send({"id":num});
 	//res.send("{}")
 });
 
@@ -140,7 +143,8 @@ router.put('/:id', function(req,res,next) {
     }
 	console.log("after");
     writeContactToFile(+req.params.id,obj1);
-    res.send(obj1);
+	res.send({"status":"success"});
+    //res.send(obj1);
 });
 
 router.patch('/:id',function(req,res){
@@ -152,7 +156,8 @@ router.patch('/:id',function(req,res){
 		obj1[i]=obj2[i];
     }
     writeContactToFile(+req.params.id,obj1);
-    res.send(obj1);	
+    //res.send(obj1);	
+	res.send({"status":"success"});
 });
 
 //saves a message
@@ -171,6 +176,6 @@ router.get('/:cid/message/:mid',function(req,res,next){
 });
 
 router.delete('/:id',function(req,res,next){
-	res.status(200).send(deleteContactsFromFile(+req.params.id));
+	res.status(200).send("{"+deleteContactsFromFile(+req.params.id)+"}");
 });
 module.exports = router;
