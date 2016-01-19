@@ -176,6 +176,6 @@ router.get('/:cid/message/:mid',function(req,res,next){
 });
 
 router.delete('/:id',function(req,res,next){
-	res.status(200).send("{"+deleteContactsFromFile(+req.params.id)+"}");
+	res.status(200).send({"status":"success"});
 });
 module.exports = router;
