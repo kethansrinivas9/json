@@ -1,10 +1,7 @@
 var express = require('express');
 var router = express.Router();
-//var contacts=new Array();
-//var messages=new Array();
 var bodyParser = require('body-parser');
 var fs=require('fs');
-//var num=0;
 //-------------------------------------
 //FILE SYSTEM
 var getNumOfContacts = function(){
@@ -84,16 +81,16 @@ router.get('/', function(req, res, next) {
 	 var str2="[";
 	 var obj1=new Object();
 	 console.log("num"+num);
-	for(i=1;count<num;i++,count++)
+	for(i=1;count<=num;i++,count++)
 	{	
 		try
 		{
 			str=JSON.stringify(getContactFromFile(i));
 			console.log(str);
 			str.concat(JSON.stringify(getContactFromFile(i)));
+			if(count!=1)
+				str2=str2.concat(",\n");
 			str2=str2.concat(str);
-			if(count!=num-1)
-			str2=str2.concat(",\n");
 			//count++;
 		}
 		catch(err)
@@ -107,24 +104,17 @@ router.get('/', function(req, res, next) {
 	//res.send({"status":"success"});
 });
 
-router.get('/all', function(req, res, next) {
-	console.log("entered")
-	res.send({"status":"success"});
-});
 
 //saves a contact
 router.post('/', function(req, res, next) {
     console.log("request to add");
     var con;
     con = req.body;
-	console.log(con+"sdflasdkfl"+req.body);
-	
-    con.messages=new Array();
+	console.log(typeof(con)+"sdflasdkfl"+req.json);
     var num = getNumOfContacts();
-    writeContactToFile(num,con);
+	writeContactToFile(num+1,con);
     putNumOfContacts(num+1);
-    res.send({"id":num});
-	//res.send("{}")
+    res.send({"id":num+1});
 });
 
 //modifies a contact
@@ -144,7 +134,6 @@ router.put('/:id', function(req,res,next) {
 	console.log("after");
     writeContactToFile(+req.params.id,obj1);
 	res.send({"status":"success"});
-    //res.send(obj1);
 });
 
 router.patch('/:id',function(req,res){
@@ -156,24 +145,9 @@ router.patch('/:id',function(req,res){
 		obj1[i]=obj2[i];
     }
     writeContactToFile(+req.params.id,obj1);
-    //res.send(obj1);	
 	res.send({"status":"success"});
 });
 
-//saves a message
-router.post('/:cid/message/',function(req,res,next){
-    var c=getContactFromFile(+req.params.cid);
-    c.messages.push(req.body);
-    writeContactToFile(+req.params.cid,c);
-    res.status(200).send("{"+(c.messages.length-1)+"}");
-});
-
-//sends a message of cid
-router.get('/:cid/message/:mid',function(req,res,next){
-    console.log("getting back");
-    var c=getContactFromFile(+req.params.cid);
-    res.status(200).send(c.messages[+req.params.mid]);
-});
 
 router.delete('/:id',function(req,res,next){
 	try{
